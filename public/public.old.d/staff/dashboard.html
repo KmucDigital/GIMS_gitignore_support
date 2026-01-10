@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamingBlock - Staff Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1bd96a;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1bd96a 0%, #17c55e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background-color: #fff;
+            color: #1bd96a;
+            border: 2px solid #1bd96a;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #1bd96a;
+            color: #fff;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            background-color: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 0 40px;
+        }
+
+        .tab-nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #666;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: #1bd96a;
+        }
+
+        .tab-btn.active {
+            color: #1bd96a;
+            border-bottom-color: #1bd96a;
+        }
+
+        .tab-badge {
+            background-color: #1bd96a;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 40px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .highlight {
+            color: #1bd96a;
+        }
+
+        /* Cards */
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #1bd96a;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #17c55e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(27, 217, 106, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e5e5e5;
+        }
+
+        .btn-danger {
+            background-color: #ff5757;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff3d3d;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background-color: #fff;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1bd96a;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        /* Chat Styles */
+        .chat-wrapper {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 280px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #1bd96a;
+            border-radius: 4px;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .chat-message.own {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background-color: #f5f5f5;
+        }
+
+        .message-content {
+            max-width: 65%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-message.own .message-content {
+            align-items: flex-end;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .message-username {
+            color: #1bd96a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .message-time {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .message-bubble {
+            background-color: #f5f5f5;
+            padding: 12px 16px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .chat-message.own .message-bubble {
+            background-color: #1bd96a;
+        }
+
+        .message-text {
+            color: #1a1a1a;
+            line-height: 1.5;
+            word-break: break-word;
+            font-size: 15px;
+        }
+
+        .chat-message.own .message-text {
+            color: #fff;
+        }
+
+        .message-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .message-id {
+            color: #999;
+            font-size: 11px;
+        }
+
+        .delete-msg-btn {
+            background: transparent;
+            border: 1px solid #ff5757;
+            color: #ff5757;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-msg-btn:hover {
+            background: #ff5757;
+            color: #fff;
+        }
+
+        .chat-input-container {
+            padding: 20px 24px;
+            background-color: #fff;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background-color: #f5f5f5;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #1bd96a;
+            background-color: #fff;
+        }
+
+        /* Items Grid */
+        .items-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .item-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: start;
+            transition: all 0.2s ease;
+        }
+
+        .item-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .item-content h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #1bd96a;
+            font-weight: 700;
+        }
+
+        .item-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-size: 15px;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .item-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Server Selector */
+        .server-selector {
+            margin-bottom: 24px;
+        }
+
+        /* Logs Container */
+        .logs-container {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 600px;
+            overflow-y: auto;
+            color: #e0e0e0;
+        }
+
+        .log-line {
+            padding: 4px 0;
+            word-break: break-all;
+        }
+
+        .log-line:hover {
+            background-color: #242424;
+        }
+
+        /* Log Level Colors */
+        .log-level-info {
+            color: #5dade2;
+        }
+
+        .log-level-warn {
+            color: #f39c12;
+        }
+
+        .log-level-error {
+            color: #e74c3c;
+        }
+
+        .log-level-debug {
+            color: #9b59b6;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: #1a1a1a;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-btn {
+            flex: 1;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .navbar, .tab-navigation, .container {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .item-card {
+                grid-template-columns: 1fr;
+            }
+
+            .message-content {
+                max-width: 80%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .tab-btn {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+
+            .chat-wrapper {
+                height: calc(100vh - 300px);
+            }
+
+            .chat-input-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-content">
+        <div class="logo">
+            <div class="logo-icon">🎮</div>
+            <span>GamingBlock</span>
+        </div>
+        <div class="nav-right">
+            <div class="user-info">
+                <strong id="currentUser">-</strong>
+            </div>
+            <button class="logout-btn" onclick="logout()">Abmelden</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Tab Navigation -->
+<div class="tab-navigation">
+    <div class="tab-nav-content">
+        <button class="tab-btn active" onclick="switchTab('chat')">
+            💬 Chat <span class="tab-badge" id="chatBadge">0</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('suspections')">
+            🔍 Fälle <span class="tab-badge" id="suspectionsBadge">0</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('reports')">
+            ⚠️ Reports <span class="tab-badge" id="reportsBadge">0</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('bugs')">
+            🐛 Bugs <span class="tab-badge" id="bugsBadge">0</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('news')">
+            📰 News <span class="tab-badge" id="newsBadge">0</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('servers')">
+            🖥️ Servers <span class="tab-badge" id="serversBadge">0</span>
+        </button>
+    </div>
+</div>
+
+<!-- Container -->
+<div class="container">
+    <!-- Chat Tab -->
+    <div id="chat-tab" class="tab-content active">
+        <div class="header">
+            <h1>💬 Server <span class="highlight">Chat</span></h1>
+            <p>Kommunikation mit dem Team</p>
+        </div>
+
+        <div class="chat-wrapper">
+            <div class="chat-messages" id="chatMessages">
+                <div class="loading">Lade Nachrichten...</div>
+            </div>
+            <div class="chat-input-container">
+                <input
+                        type="text"
+                        class="chat-input"
+                        id="chatInput"
+                        placeholder="Nachricht eingeben..."
+                        onkeypress="if(event.key === 'Enter') sendMessage()"
+                >
+                <button class="btn btn-primary" onclick="sendMessage()">📤 Senden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suspections Tab -->
+    <div id="suspections-tab" class="tab-content">
+        <div class="header">
+            <h1>🔍 Verdachts<span class="highlight">fälle</span></h1>
+            <p>Erstellen und verwalten von Verdachtsfällen</p>
+        </div>
+
+        <div class="card">
+            <h2>➕ Neuen Fall erstellen</h2>
+
+            <div class="form-group">
+                <label>Titel</label>
+                <input type="text" id="suspectionTitle" placeholder="Fall-Titel eingeben...">
+            </div>
+
+            <div class="form-group">
+                <label>Betroffene Person/Spieler</label>
+                <input type="text" id="suspectionSubject" placeholder="Spielername oder Person...">
+            </div>
+
+            <div class="form-group">
+                <label>Beschreibung</label>
+                <textarea id="suspectionDescription" rows="6" placeholder="Detaillierte Beschreibung des Falls..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" onclick="createSuspection()">🔍 Fall erstellen</button>
+        </div>
+
+        <div class="section-header">
+            <h2>Aktive Fälle</h2>
+            <button class="btn btn-secondary" onclick="loadSuspections()">🔄 Aktualisieren</button>
+        </div>
+
+        <div id="suspectionsContainer" class="items-grid">
+            <div class="loading">Lade Fälle...</div>
+        </div>
+    </div>
+
+    <!-- Reports Tab -->
+    <div id="reports-tab" class="tab-content">
+        <div class="header">
+            <h1>⚠️ Spieler <span class="highlight">Reports</span></h1>
+            <p>Verwaltung gemeldeter Spieler</p>
+        </div>
+
+        <div class="section-header">
+            <h2></h2>
+            <button class="btn btn-secondary" onclick="loadReports()">🔄 Aktualisieren</button>
+        </div>
+
+        <div id="reportsContainer" class="items-grid">
+            <div class="loading">Lade Reports...</div>
+        </div>
+    </div>
+
+    <!-- Bugs Tab -->
+    <div id="bugs-tab" class="tab-content">
+        <div class="header">
+            <h1>🐛 Bug <span class="highlight">Meldungen</span></h1>
+            <p>Verwaltung gemeldeter Bugs</p>
+        </div>
+
+        <div class="section-header">
+            <h2></h2>
+            <button class="btn btn-secondary" onclick="loadBugs()">🔄 Aktualisieren</button>
+        </div>
+
+        <div id="bugsContainer" class="items-grid">
+            <div class="loading">Lade Bugs...</div>
+        </div>
+    </div>
+
+    <!-- News Tab -->
+    <div id="news-tab" class="tab-content">
+        <div class="header">
+            <h1>📰 News <span class="highlight">Management</span></h1>
+            <p>Erstellen und verwalten von Server-News</p>
+        </div>
+
+        <div id="newsAccessDenied" style="display: none;">
+            <div class="empty-state">
+                <div class="empty-state-icon">🔒</div>
+                <h2 style="color: #ff5757; margin-bottom: 10px;">Kein Zugriff</h2>
+                <p>Nur Administratoren können News erstellen und verwalten.</p>
+            </div>
+        </div>
+
+        <div id="newsContent" style="display: none;">
+            <div class="card">
+                <h2>✍️ Neue News erstellen</h2>
+
+                <div class="form-group">
+                    <label>Titel</label>
+                    <input type="text" id="newsTitle" placeholder="News-Titel eingeben...">
+                </div>
+
+                <div class="form-group">
+                    <label>Inhalt</label>
+                    <textarea id="newsContentInput" rows="6" placeholder="News-Inhalt eingeben..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Wichtigkeit (1-5)</label>
+                    <select id="newsLevel">
+                        <option value="1">1 - Niedrig</option>
+                        <option value="2">2 - Normal</option>
+                        <option value="3" selected>3 - Mittel</option>
+                        <option value="4">4 - Hoch</option>
+                        <option value="5">5 - Sehr wichtig</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="createNews()">📤 News veröffentlichen</button>
+            </div>
+
+            <div class="section-header">
+                <h2>Veröffentlichte News</h2>
+                <button class="btn btn-secondary" onclick="loadNews()">🔄 Aktualisieren</button>
+            </div>
+
+            <div id="newsContainer" class="items-grid">
+                <div class="loading">Lade News...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Servers Tab -->
+    <div id="servers-tab" class="tab-content">
+        <div class="header">
+            <h1>🖥️ Server <span class="highlight">Logs</span></h1>
+            <p>Server-Logs in Echtzeit ansehen</p>
+        </div>
+
+        <div class="card server-selector">
+            <label>Server auswählen:</label>
+            <select id="serverSelect" onchange="loadServerLogs()">
+                <option value="">-- Server auswählen --</option>
+            </select>
+        </div>
+
+        <div class="section-header">
+            <h2 id="serverLogsTitle">Server Logs</h2>
+            <button class="btn btn-secondary" onclick="loadServerLogs()">🔄 Aktualisieren</button>
+        </div>
+
+        <div id="logsContainer" class="logs-container">
+            <div class="empty-state">
+                <div class="empty-state-icon">🖥️</div>
+                <p>Wähle einen Server aus, um die Logs anzuzeigen</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit News Modal -->
+<div id="editNewsModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>✏️ News bearbeiten</h2>
+            <button class="modal-close" onclick="closeEditModal()">×</button>
+        </div>
+
+        <form class="modal-form" onsubmit="saveNewsEdit(event)">
+            <input type="hidden" id="editNewsId">
+
+            <div class="form-group">
+                <label>Titel</label>
+                <input type="text" id="editNewsTitle" required>
+            </div>
+
+            <div class="form-group">
+                <label>Inhalt</label>
+                <textarea id="editNewsContent" rows="8" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Wichtigkeit (1-5)</label>
+                <select id="editNewsLevel" required>
+                    <option value="1">1 - Niedrig</option>
+                    <option value="2">2 - Normal</option>
+                    <option value="3">3 - Mittel</option>
+                    <option value="4">4 - Hoch</option>
+                    <option value="5">5 - Sehr wichtig</option>
+                </select>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-secondary modal-btn" onclick="closeEditModal()">Abbrechen</button>
+                <button type="submit" class="btn btn-primary modal-btn">💾 Speichern</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Suspection Modal -->
+<div id="editSuspectionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>✏️ Fall bearbeiten</h2>
+            <button class="modal-close" onclick="closeEditSuspectionModal()">×</button>
+        </div>
+
+        <form class="modal-form" onsubmit="saveSuspectionEdit(event)">
+            <input type="hidden" id="editSuspectionId">
+
+            <div class="form-group">
+                <label>Titel</label>
+                <input type="text" id="editSuspectionTitle" required>
+            </div>
+
+            <div class="form-group">
+                <label>Betroffene Person/Spieler</label>
+                <input type="text" id="editSuspectionSubject" required>
+            </div>
+
+            <div class="form-group">
+                <label>Beschreibung</label>
+                <textarea id="editSuspectionDescription" rows="8" required></textarea>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-secondary modal-btn" onclick="closeEditSuspectionModal()">Abbrechen</button>
+                <button type="submit" class="btn btn-primary modal-btn">💾 Speichern</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const API_BASE = window.location.origin;
+
+    // Check authentication
+    const token = localStorage.getItem('staffToken');
+    const username = localStorage.getItem('staffUsername');
+    let userPermissions = null;
+
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+
+    document.getElementById('currentUser').textContent = username || 'Unbekannt';
+
+    // Check user permissions
+    async function checkPermissions() {
+        try {
+            const response = await fetch(`${API_BASE}/api/staff/users/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                return;
+            }
+
+            const user = data.data.find(u => u.name === username);
+            if (user) {
+                userPermissions = user.permissions;
+            }
+        } catch (error) {
+            console.error('Error checking permissions:', error);
+        }
+    }
+
+    checkPermissions();
+
+    function logout() {
+        localStorage.removeItem('staffToken');
+        localStorage.removeItem('staffUsername');
+        window.location.href = 'login.html';
+    }
+
+    // Tab Switching
+    function switchTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Remove active from all buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Show selected tab
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+
+        // Add active to selected button
+        event.target.closest('.tab-btn').classList.add('active');
+
+        // Load data for the tab
+        if (tabName === 'chat') {
+            loadMessages();
+        } else if (tabName === 'suspections') {
+            loadSuspections();
+        } else if (tabName === 'reports') {
+            loadReports();
+        } else if (tabName === 'bugs') {
+            loadBugs();
+        } else if (tabName === 'news') {
+            checkNewsAccess();
+        } else if (tabName === 'servers') {
+            loadServers();
+        }
+    }
+
+    // Check News Access
+    async function checkNewsAccess() {
+        await checkPermissions();
+
+        if (userPermissions === 'admin') {
+            document.getElementById('newsAccessDenied').style.display = 'none';
+            document.getElementById('newsContent').style.display = 'block';
+            loadNews();
+        } else {
+            document.getElementById('newsAccessDenied').style.display = 'block';
+            document.getElementById('newsContent').style.display = 'none';
+        }
+    }
+
+    // Load Messages
+    async function loadMessages() {
+        const container = document.getElementById('chatMessages');
+        container.innerHTML = '<div class="loading">Lade Nachrichten...</div>';
+
+        try {
+            const messagesResponse = await fetch(`${API_BASE}/api/msg/get`);
+            const messagesData = await messagesResponse.json();
+
+            if (messagesData.error || !messagesData.data) {
+                throw new Error('Fehler beim Laden der Nachrichten');
+            }
+
+            const usersResponse = await fetch(`${API_BASE}/api/staff/users/get`);
+            const usersData = await usersResponse.json();
+
+            if (usersData.error || !usersData.data) {
+                throw new Error('Fehler beim Laden der Benutzer');
+            }
+
+            const userMap = {};
+            usersData.data.forEach(user => {
+                userMap[user.name] = user.ign || user.name;
+            });
+
+            const messages = messagesData.data;
+            document.getElementById('chatBadge').textContent = messages.length;
+
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💬</div>
+                        <p>Keine Nachrichten vorhanden</p>
+                    </div>
+                `;
+                return;
+            }
+
+            messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            container.innerHTML = messages.map(msg => {
+                const isOwnMessage = msg.sender === username;
+                const ign = userMap[msg.sender] || msg.sender;
+                const avatarUrl = `https://crafatar.com/avatars/${ign}?size=40&overlay`;
+
+                const deleteButton = isOwnMessage
+                    ? `<button class="delete-msg-btn" onclick="deleteMsg(${msg.id})">🗑️ Löschen</button>`
+                    : '';
+
+                return `
+                    <div class="chat-message ${isOwnMessage ? 'own' : ''}">
+                        <img src="${avatarUrl}" alt="${escapeHtml(msg.sender)}" class="message-avatar" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22%3E%3Crect fill=%22%23f5f5f5%22 width=%2240%22 height=%2240%22/%3E%3C/svg%3E'">
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-username">${escapeHtml(msg.sender)}</span>
+                                <span class="message-time">${formatTime(msg.date)}</span>
+                            </div>
+                            <div class="message-bubble">
+                                <div class="message-text">${escapeHtml(msg.content)}</div>
+                            </div>
+                            <div class="message-actions">
+                                <span class="message-id">ID: ${msg.id}</span>
+                                ${deleteButton}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.scrollTop = container.scrollHeight;
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p>Fehler beim Laden: ${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Send Message
+    async function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const msg = input.value.trim();
+
+        if (!msg) {
+            return;
+        }
+
+        const sendBtn = document.querySelector('.chat-input-container .btn-primary');
+        sendBtn.disabled = true;
+        sendBtn.textContent = '⏳ Sende...';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/msg/send`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ msg })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error('Fehler beim Senden');
+            }
+
+            input.value = '';
+            await loadMessages();
+
+        } catch (error) {
+            alert('Fehler beim Senden: ' + error.message);
+        } finally {
+            sendBtn.disabled = false;
+            sendBtn.textContent = '📤 Senden';
+        }
+    }
+
+    // Delete Message
+    async function deleteMsg(id) {
+        if (!confirm(`Nachricht mit ID ${id} wirklich löschen?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/msg/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ id })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error('Fehler beim Löschen');
+            }
+
+            await loadMessages();
+
+        } catch (error) {
+            alert('Fehler beim Löschen: ' + error.message);
+        }
+    }
+
+    // Load Reports
+    async function loadReports() {
+        const container = document.getElementById('reportsContainer');
+        container.innerHTML = '<div class="loading">Lade Reports...</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/reports/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Fehler beim Laden der Reports');
+            }
+
+            const reports = data.data;
+            document.getElementById('reportsBadge').textContent = reports.length;
+
+            if (reports.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔭</div>
+                        <p>Keine Reports vorhanden</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = reports.map(report => `
+                <div class="item-card">
+                    <div class="item-content">
+                        <h3>Spieler: ${escapeHtml(report.player)}</h3>
+                        <p>${escapeHtml(report.content)}</p>
+                        <div class="item-meta">
+                            <span>🆔 ID: ${report.id}</span>
+                            <span>📅 ${formatTime(report.created_at)}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger" onclick="deleteReport('${escapeHtml(report.player)}')">
+                            🗑️ Löschen
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p>Fehler beim Laden: ${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Load Bugs
+    async function loadBugs() {
+        const container = document.getElementById('bugsContainer');
+        container.innerHTML = '<div class="loading">Lade Bugs...</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/bugs/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Fehler beim Laden der Bugs');
+            }
+
+            const bugs = data.data;
+            document.getElementById('bugsBadge').textContent = bugs.length;
+
+            if (bugs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✅</div>
+                        <p>Keine Bugs gemeldet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = bugs.map(bug => `
+                <div class="item-card">
+                    <div class="item-content">
+                        <h3>${escapeHtml(bug.name)}</h3>
+                        <p>${escapeHtml(bug.content)}</p>
+                        <div class="item-meta">
+                            <span>🆔 ID: ${bug.id}</span>
+                            <span>📅 ${formatTime(bug.created_at)}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-danger" onclick="deleteBug('${escapeHtml(bug.name)}')">
+                            🗑️ Löschen
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p>Fehler beim Laden: ${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Delete Report
+    async function deleteReport(player) {
+        if (!confirm(`Report für Spieler "${player}" wirklich löschen?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/reports/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ player })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error('Fehler beim Löschen');
+            }
+
+            await loadReports();
+        } catch (error) {
+            alert('Fehler beim Löschen: ' + error.message);
+        }
+    }
+
+    // Delete Bug
+    async function deleteBug(name) {
+        if (!confirm(`Bug "${name}" wirklich löschen?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/bugs/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error('Fehler beim Löschen');
+            }
+
+            await loadBugs();
+        } catch (error) {
+            alert('Fehler beim Löschen: ' + error.message);
+        }
+    }
+
+    // Load News
+    async function loadNews() {
+        const container = document.getElementById('newsContainer');
+        container.innerHTML = '<div class="loading">Lade News...</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/news/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Fehler beim Laden der News');
+            }
+
+            const newsList = data.data;
+            document.getElementById('newsBadge').textContent = newsList.length;
+
+            if (newsList.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📰</div>
+                        <p>Keine News vorhanden</p>
+                    </div>
+                `;
+                return;
+            }
+
+            newsList.sort((a, b) => new Date(b.creation || b.created_at) - new Date(a.creation || a.created_at));
+
+            container.innerHTML = newsList.map(news => `
+                <div class="item-card">
+                    <div class="item-content">
+                        <h3>${escapeHtml(news.title)}</h3>
+                        <p>${escapeHtml(news.msg || news.content)}</p>
+                        <div class="item-meta">
+                            <span>🆔 ID: ${news.id}</span>
+                            <span>👤 ${escapeHtml(news.author)}</span>
+                            <span>📊 Level: ${news.level}</span>
+                            <span>📅 ${formatTime(news.creation || news.created_at)}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-primary" onclick='openEditModal(${JSON.stringify(news).replace(/'/g, "&apos;")})'>
+                            ✏️ Bearbeiten
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteNews(${news.id})">
+                            🗑️ Löschen
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p>Fehler beim Laden: ${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Create News
+    async function createNews() {
+        const title = document.getElementById('newsTitle').value.trim();
+        const content = document.getElementById('newsContentInput').value.trim();
+        const level = parseInt(document.getElementById('newsLevel').value);
+
+        if (!title || !content) {
+            alert('Bitte fülle alle Felder aus!');
+            return;
+        }
+
+        if (level > 5 || level < 1) {
+            alert('Level muss zwischen 1 und 5 sein!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/news/write`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, content, level })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.main?.msg || 'Fehler beim Erstellen');
+            }
+
+            document.getElementById('newsTitle').value = '';
+            document.getElementById('newsContentInput').value = '';
+            document.getElementById('newsLevel').value = '3';
+
+            alert('News erfolgreich erstellt!');
+            await loadNews();
+
+        } catch (error) {
+            alert('Fehler beim Erstellen: ' + error.message);
+        }
+    }
+
+    // Delete News
+    async function deleteNews(id) {
+        if (!confirm(`News mit ID ${id} wirklich löschen?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/news/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ id })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error('Fehler beim Löschen');
+            }
+
+            await loadNews();
+
+        } catch (error) {
+            alert('Fehler beim Löschen: ' + error.message);
+        }
+    }
+
+    // Open Edit Modal
+    function openEditModal(news) {
+        document.getElementById('editNewsId').value = news.id;
+        document.getElementById('editNewsTitle').value = news.title;
+        document.getElementById('editNewsContent').value = news.msg || news.content;
+        document.getElementById('editNewsLevel').value = news.level;
+
+        document.getElementById('editNewsModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close Edit Modal
+    function closeEditModal() {
+        document.getElementById('editNewsModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Save News Edit
+    async function saveNewsEdit(event) {
+        event.preventDefault();
+
+        const id = parseInt(document.getElementById('editNewsId').value);
+        const title = document.getElementById('editNewsTitle').value.trim();
+        const content = document.getElementById('editNewsContent').value.trim();
+        const level = parseInt(document.getElementById('editNewsLevel').value);
+
+        if (!title || !content) {
+            alert('Bitte fülle alle Felder aus!');
+            return;
+        }
+
+        if (level > 5 || level < 1) {
+            alert('Level muss zwischen 1 und 5 sein!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/news/edit`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ id, title, content, level })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.main?.msg || 'Fehler beim Bearbeiten');
+            }
+
+            closeEditModal();
+            await loadNews();
+
+        } catch (error) {
+            alert('Fehler beim Bearbeiten: ' + error.message);
+        }
+    }
+
+    // Load Servers
+    async function loadServers() {
+        const select = document.getElementById('serverSelect');
+        const currentValue = select.value;
+
+        try {
+            const response = await fetch(`${API_BASE}/api/servers/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Fehler beim Laden der Server');
+            }
+
+            const servers = data.data;
+            document.getElementById('serversBadge').textContent = servers.length;
+
+            select.innerHTML = '<option value="">-- Server auswählen --</option>';
+
+            servers.forEach(server => {
+                const option = document.createElement('option');
+                option.value = server.server_id;
+                option.textContent = server.server_name;
+                select.appendChild(option);
+            });
+
+            if (currentValue) {
+                select.value = currentValue;
+            }
+
+        } catch (error) {
+            console.error('Error loading servers:', error);
+        }
+    }
+
+    // Load Server Logs
+    async function loadServerLogs() {
+        const select = document.getElementById('serverSelect');
+        const serverId = select.value;
+        const container = document.getElementById('logsContainer');
+        const title = document.getElementById('serverLogsTitle');
+
+        if (!serverId) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🖥️</div>
+                    <p>Wähle einen Server aus, um die Logs anzuzeigen</p>
+                </div>
+            `;
+            title.textContent = 'Server Logs';
+            return;
+        }
+
+        const serverName = select.options[select.selectedIndex].text;
+        title.textContent = `Logs: ${serverName}`;
+        container.innerHTML = '<div class="loading">Lade Logs...</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/servers/logs/get?id=${encodeURIComponent(serverId)}`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Fehler beim Laden der Logs');
+            }
+
+            const logs = data.data;
+
+            if (logs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📄</div>
+                        <p>Keine Logs verfügbar</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = logs.reverse().map(log =>
+                `<div class="log-line">${escapeHtml(log)}</div>`
+            ).join('');
+
+            container.scrollTop = container.scrollHeight;
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p>Fehler beim Laden: ${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Load Suspections
+    async function loadSuspections() {
+        const container = document.getElementById('suspectionsContainer');
+        container.innerHTML = '<div class="loading">Lade Fälle...</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/suspections/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Fehler beim Laden der Fälle');
+            }
+
+            const suspections = data.data;
+            document.getElementById('suspectionsBadge').textContent = suspections.length;
+
+            if (suspections.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <p>Keine Fälle vorhanden</p>
+                    </div>
+                `;
+                return;
+            }
+
+            suspections.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
+
+            container.innerHTML = suspections.map(susp => `
+                <div class="item-card">
+                    <div class="item-content">
+                        <h3>${escapeHtml(susp.title)}</h3>
+                        <p><strong>Betroffene Person:</strong> ${escapeHtml(susp.subject)}</p>
+                        <p>${escapeHtml(susp.description)}</p>
+                        <div class="item-meta">
+                            <span>🆔 ID: ${susp.id}</span>
+                            ${susp.created_at ? `<span>📅 ${formatTime(susp.created_at)}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-primary" onclick='openEditSuspectionModal(${JSON.stringify(susp).replace(/'/g, "&apos;")})'>
+                            ✏️ Bearbeiten
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteSuspection(${susp.id})">
+                            🗑️ Löschen
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <p>Fehler beim Laden: ${error.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // Create Suspection
+    async function createSuspection() {
+        const title = document.getElementById('suspectionTitle').value.trim();
+        const subject = document.getElementById('suspectionSubject').value.trim();
+        const description = document.getElementById('suspectionDescription').value.trim();
+
+        if (!title || !subject || !description) {
+            alert('Bitte fülle alle Felder aus!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/suspections/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, subject, description })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.main?.msg || 'Fehler beim Erstellen');
+            }
+
+            document.getElementById('suspectionTitle').value = '';
+            document.getElementById('suspectionSubject').value = '';
+            document.getElementById('suspectionDescription').value = '';
+
+            alert('Fall erfolgreich erstellt!');
+            await loadSuspections();
+
+        } catch (error) {
+            alert('Fehler beim Erstellen: ' + error.message);
+        }
+    }
+
+    // Delete Suspection
+    async function deleteSuspection(id) {
+        if (!confirm(`Fall mit ID ${id} wirklich löschen?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/suspections/delete`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ id })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error('Fehler beim Löschen');
+            }
+
+            await loadSuspections();
+
+        } catch (error) {
+            alert('Fehler beim Löschen: ' + error.message);
+        }
+    }
+
+    // Open Edit Suspection Modal
+    function openEditSuspectionModal(suspection) {
+        document.getElementById('editSuspectionId').value = suspection.id;
+        document.getElementById('editSuspectionTitle').value = suspection.title;
+        document.getElementById('editSuspectionSubject').value = suspection.subject;
+        document.getElementById('editSuspectionDescription').value = suspection.description;
+
+        document.getElementById('editSuspectionModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close Edit Suspection Modal
+    function closeEditSuspectionModal() {
+        document.getElementById('editSuspectionModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Save Suspection Edit
+    async function saveSuspectionEdit(event) {
+        event.preventDefault();
+
+        const id = parseInt(document.getElementById('editSuspectionId').value);
+        const title = document.getElementById('editSuspectionTitle').value.trim();
+        const subject = document.getElementById('editSuspectionSubject').value.trim();
+        const description = document.getElementById('editSuspectionDescription').value.trim();
+
+        if (!title || !subject || !description) {
+            alert('Bitte fülle alle Felder aus!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/api/suspections/edit`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ id, title, subject, description })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.main?.msg || 'Fehler beim Bearbeiten');
+            }
+
+            closeEditSuspectionModal();
+            await loadSuspections();
+
+        } catch (error) {
+            alert('Fehler beim Bearbeiten: ' + error.message);
+        }
+    }
+
+    // Utility Functions
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleString('de-DE', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+
+    // Close modals when clicking outside
+    document.getElementById('editNewsModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditModal();
+        }
+    });
+
+    document.getElementById('editSuspectionModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeEditSuspectionModal();
+        }
+    });
+
+    // Initial load
+    loadMessages();
+
+    // Auto-refresh for current tab every 30 seconds
+    setInterval(() => {
+        const activeTab = document.querySelector('.tab-content.active').id;
+        if (activeTab === 'chat-tab') {
+            loadMessages();
+        } else if (activeTab === 'suspections-tab') {
+            loadSuspections();
+        } else if (activeTab === 'reports-tab') {
+            loadReports();
+        } else if (activeTab === 'bugs-tab') {
+            loadBugs();
+        } else if (activeTab === 'news-tab' && userPermissions === 'admin') {
+            loadNews();
+        } else if (activeTab === 'servers-tab') {
+            const serverId = document.getElementById('serverSelect').value;
+            if (serverId) {
+                loadServerLogs();
+            }
+        }
+    }, 30000);
+</script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamingBlock - Staff Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background-color: #242424;
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .logo h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffa94d 0%, #ff8c42 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            background-color: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ffa94d;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ffa94d 0%, #ff8c42 100%);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 169, 77, 0.4);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-card">
+        <div class="logo">
+            <div class="logo-icon">🎮</div>
+            <h1><span class="highlight">Staff</span> Portal</h1>
+            <p>Melde dich an um fortzufahren</p>
+        </div>
+
+        <div id="loginMessage" class="message"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Benutzername</label>
+                <input type="text" id="username" name="username" required placeholder="Dein Benutzername">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Passwort</label>
+                <input type="password" id="password" name="password" required placeholder="Dein Passwort">
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                Anmelden
+            </button>
+        </form>
+
+        <div class="footer-text">
+            GamingBlock Staff Dashboard
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = window.location.origin;
+
+    // Check if already logged in
+    const token = localStorage.getItem('staffToken');
+    if (token) {
+        window.location.href = 'dashboard.html';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById('loginBtn');
+        const msg = document.getElementById('loginMessage');
+        const form = e.target;
+
+        btn.disabled = true;
+        btn.textContent = 'Anmeldung läuft...';
+        msg.style.display = 'none';
+
+        const formData = {
+            username: form.username.value.trim(),
+            password: form.password.value
+        };
+
+        try {
+            const response = await fetch(`${API_BASE}/api/staff/users/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && !data.error && data.main.accessToken) {
+                // Save token
+                localStorage.setItem('staffToken', data.main.accessToken);
+                localStorage.setItem('staffUsername', formData.username);
+
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } else {
+                throw new Error('Ungültige Anmeldedaten');
+            }
+        } catch (error) {
+            msg.className = 'message error';
+            msg.textContent = 'Fehler: ' + error.message;
+            msg.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Anmelden';
+        }
+    });
+</script>
+</body>
+</html>

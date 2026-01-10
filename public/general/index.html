@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamingBlock - Reports & Bugs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffa94d;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffa94d 0%, #ff8c42 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #999;
+            font-size: 18px;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Forms Section */
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .form-card {
+            background-color: #242424;
+            border-radius: 16px;
+            padding: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-card h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffa94d 0%, #ff8c42 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-card p {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            background-color: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffa94d;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ffa94d 0%, #ff8c42 100%);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 169, 77, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: rgba(46, 213, 115, 0.1);
+            border: 1px solid rgba(46, 213, 115, 0.3);
+            color: #2ed573;
+        }
+
+        .message.error {
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        /* View Section */
+        .view-section {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .view-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .refresh-btn {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background-color: #444;
+        }
+
+        .items-container {
+            display: grid;
+            gap: 25px;
+        }
+
+        .item-card {
+            background-color: #242424;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-2px);
+            background-color: #2a2a2a;
+        }
+
+        .item-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #ffa94d;
+        }
+
+        .item-card p {
+            color: #bbb;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #888;
+            font-size: 16px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background-color: #242424;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #ffa94d;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffa94d;
+        }
+
+        @media (max-width: 1024px) {
+            .forms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 20px 30px;
+            }
+
+            .view-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .form-card {
+                padding: 30px;
+            }
+
+            .form-card h2 {
+                font-size: 26px;
+            }
+
+            .view-header h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <span>🎮</span>
+        <span>GamingBlock</span>
+    </div>
+    <ul class="nav-links">
+        <li><a href="#" data-section="submit" class="active">Submit</a></li>
+        <li><a href="#" data-section="bugs">View Bugs</a></li>
+        <li><a href="#" data-section="reports">View Reports</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <!-- Submit Section -->
+    <section id="submit-section" class="section active">
+        <div class="header">
+            <h1>Help us <span class="highlight">improve</span></h1>
+            <p>Report bugs or submit player reports</p>
+        </div>
+
+        <div class="forms-grid">
+            <!-- Bug Report Form -->
+            <div class="form-card">
+                <h2>🐛 Report a Bug</h2>
+                <p>Found an issue? Let us know!</p>
+
+                <div id="bugMessage" class="message"></div>
+
+                <form id="bugForm">
+                    <div class="form-group">
+                        <label for="bugName">Bug Title *</label>
+                        <input type="text" id="bugName" name="name" required placeholder="e.g. Login not working">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bugContent">Description *</label>
+                        <textarea id="bugContent" name="content" required placeholder="Describe the bug in detail..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="bugSubmitBtn">
+                        Submit Bug
+                    </button>
+                </form>
+            </div>
+
+            <!-- Player Report Form -->
+            <div class="form-card">
+                <h2>⚠️ Report a Player</h2>
+                <p>Report players who violate the rules</p>
+
+                <div id="reportMessage" class="message"></div>
+
+                <form id="reportForm">
+                    <div class="form-group">
+                        <label for="playerName">Player Name *</label>
+                        <input type="text" id="playerName" name="player" required placeholder="e.g. PlayerXYZ">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportContent">Reason *</label>
+                        <textarea id="reportContent" name="content" required placeholder="What happened? Describe the situation..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="reportSubmitBtn">
+                        Submit Report
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bugs View Section -->
+    <section id="bugs-section" class="section">
+        <div class="view-section">
+            <div class="view-header">
+                <h2>🐛 <span class="highlight">Bug Reports</span></h2>
+                <button class="refresh-btn" onclick="loadBugs()">🔄 Refresh</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Bugs</div>
+                    <div class="stat-value" id="bugCount">-</div>
+                </div>
+            </div>
+
+            <div id="bugsContainer" class="items-container">
+                <div class="loading">Loading bugs...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reports View Section -->
+    <section id="reports-section" class="section">
+        <div class="view-section">
+            <div class="view-header">
+                <h2>⚠️ <span class="highlight">Player Reports</span></h2>
+                <button class="refresh-btn" onclick="loadReports()">🔄 Refresh</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Reports</div>
+                    <div class="stat-value" id="reportCount">-</div>
+                </div>
+            </div>
+
+            <div id="reportsContainer" class="items-container">
+                <div class="loading">Loading reports...</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    const API_BASE = window.location.origin;
+
+    // Navigation
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Update active link
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            // Show corresponding section
+            const sectionName = link.dataset.section;
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`${sectionName}-section`).classList.add('active');
+
+            // Load data for view sections
+            if (sectionName === 'bugs') {
+                loadBugs();
+            } else if (sectionName === 'reports') {
+                loadReports();
+            }
+        });
+    });
+
+    // Bug Form Handler
+    document.getElementById('bugForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById('bugSubmitBtn');
+        const msg = document.getElementById('bugMessage');
+        const form = e.target;
+
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+        msg.style.display = 'none';
+
+        const formData = {
+            name: form.name.value.trim(),
+            content: form.content.value.trim()
+        };
+
+        try {
+            const response = await fetch(`${API_BASE}/api/bugs/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && !data.error) {
+                msg.className = 'message success';
+                msg.textContent = 'Bug submitted successfully! Thank you for your feedback.';
+                msg.style.display = 'block';
+                form.reset();
+            } else {
+                throw new Error(data.main?.msg || 'Error submitting');
+            }
+        } catch (error) {
+            msg.className = 'message error';
+            msg.textContent = 'Error: ' + error.message;
+            msg.style.display = 'block';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Submit Bug';
+        }
+    });
+
+    // Report Form Handler
+    document.getElementById('reportForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById('reportSubmitBtn');
+        const msg = document.getElementById('reportMessage');
+        const form = e.target;
+
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+        msg.style.display = 'none';
+
+        const formData = {
+            player: form.player.value.trim(),
+            content: form.content.value.trim()
+        };
+
+        try {
+            const response = await fetch(`${API_BASE}/api/reports/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (response.ok && !data.error) {
+                msg.className = 'message success';
+                msg.textContent = 'Report submitted successfully! Our team will review it.';
+                msg.style.display = 'block';
+                form.reset();
+            } else {
+                throw new Error(data.main?.msg || 'Error submitting');
+            }
+        } catch (error) {
+            msg.className = 'message error';
+            msg.textContent = 'Error: ' + error.message;
+            msg.style.display = 'block';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Submit Report';
+        }
+    });
+
+    // Load Bugs
+    async function loadBugs() {
+        const container = document.getElementById('bugsContainer');
+        container.innerHTML = '<div class="loading">Loading bugs...</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/bugs/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Error loading bugs');
+            }
+
+            const bugs = data.data;
+            document.getElementById('bugCount').textContent = bugs.length;
+
+            if (bugs.length === 0) {
+                container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">✅</div>
+                            <p>No bugs reported yet</p>
+                        </div>
+                    `;
+                return;
+            }
+
+            container.innerHTML = bugs.map(bug => `
+                    <div class="item-card">
+                        <h3>${escapeHtml(bug.name)}</h3>
+                        <p>${escapeHtml(bug.content)}</p>
+                        <div class="item-meta">
+                            <span>🆔 ID: ${bug.id}</span>
+                            <span>📅 ${new Date(bug.created_at).toLocaleString('en-US')}</span>
+                        </div>
+                    </div>
+                `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <p>Error loading bugs: ${error.message}</p>
+                    </div>
+                `;
+        }
+    }
+
+    // Load Reports
+    async function loadReports() {
+        const container = document.getElementById('reportsContainer');
+        container.innerHTML = '<div class="loading">Loading reports...</div>';
+
+        try {
+            const response = await fetch(`${API_BASE}/api/reports/get`);
+            const data = await response.json();
+
+            if (data.error || !data.data) {
+                throw new Error('Error loading reports');
+            }
+
+            const reports = data.data;
+            document.getElementById('reportCount').textContent = reports.length;
+
+            if (reports.length === 0) {
+                container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📭</div>
+                            <p>No reports submitted yet</p>
+                        </div>
+                    `;
+                return;
+            }
+
+            container.innerHTML = reports.map(report => `
+                    <div class="item-card">
+                        <h3>Player: ${escapeHtml(report.player)}</h3>
+                        <p>${escapeHtml(report.content)}</p>
+                        <div class="item-meta">
+                            <span>🆔 ID: ${report.id}</span>
+                            <span>📅 ${new Date(report.created_at).toLocaleString('en-US')}</span>
+                        </div>
+                    </div>
+                `).join('');
+
+        } catch (error) {
+            container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <p>Error loading reports: ${error.message}</p>
+                    </div>
+                `;
+        }
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+</body>
+</html>
